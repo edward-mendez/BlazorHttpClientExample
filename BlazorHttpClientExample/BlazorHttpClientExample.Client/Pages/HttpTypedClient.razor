@@ -1,0 +1,50 @@
+﻿@page "/typed-client"
+
+@rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
+
+@using BlazorHttpClientExample.Client.Models;
+@using System.Text.Json
+
+@inject JsonPlaceHolderClient _jsonPlaceHolderClient;
+
+<h3>HttpTypedClient</h3>
+
+<div>
+    @if (todos == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        @foreach (var todo in todos)
+        {
+            <p>@todo.Title</p>
+
+        }
+    }
+</div>
+
+@code {
+    Todos[] todos;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        todos = await _jsonPlaceHolderClient.GetTodos();
+
+        //todos = await Http.GetFromJsonAsync<Todos[]>("todos");
+
+
+        //var uri = new Uri("https://jsonplaceholder.typicode.com/todos");
+
+        // var ct = CancellationToken.None;
+        // var response = await Http.GetAsync("todos");
+        // var content = await response.Content.ReadAsStringAsync(ct);
+        // if (!response.IsSuccessStatusCode)
+        // {
+        //     throw new ApplicationException(content);
+        // }
+
+        // todos = JsonSerializer.Deserialize<Todos[]>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+    }
+}
